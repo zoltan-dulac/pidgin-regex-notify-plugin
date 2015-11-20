@@ -20,6 +20,8 @@ my $pluginName = "Notify Message Match Plugin";
 my $pluginShortName = "pattern_match_notifier";
 my $main_pref = "/plugins/core/$pluginShortName";
 my $regexToMatch_pref = "$main_pref/pattern";
+my $startDelay = 20; #"$main_pref/startDelay";
+my $start_time;
 
 sub prefs_info_cb;
 sub pattern_match_chat_msg_cb;
@@ -27,11 +29,11 @@ sub pattern_match_chat_msg_cb;
 %PLUGIN_INFO = (
     perl_api_version => 2,
     name => $pluginName,
-    version => "0.1",
+    version => "0.2",
     summary => "Notify if a message matches the given regex pattern.",
     description => "Notify if a message matches the given regex pattern.  Can be used to notify you if a person mentions your user name in a chat.  Can also be used for notifying you when your alias is mentioned.  For example, in HipChat, your user name is this cryptic sequence of numbers that no-one ever uses.  Instead, people use your nickname prefixed by an '@'.  This plugin can be used to notify you when this string is mentioned in chat.",
-    author => "Katriana",
-    url => "http://pidgin.im",
+    author => "Katriana, with small modifications by Zoltan Hawryluk",
+    url => "https://github.com/katriana/pidgin-regex-notify-plugin",
     load => "plugin_load",
     unload => "plugin_unload",
     prefs_info => "prefs_info_cb"
@@ -42,14 +44,31 @@ sub prefs_info_cb {
     my $ppref = Purple::PluginPref->new_with_name_and_label(
         $regexToMatch_pref, "Regex to match against received messages");
     $frame->add($ppref);
+    # $ppref = Purple::PluginPref->new_with_name_and_label(
+    #    $startDelay, "How many seconds from start for plugin to become active");
+    # $frame->add($ppref);
 
     return $frame;
 }
 
+#.. we need to update this so we reduce the amount of alerts -- probably by looking at $conv (see https://developer.pidgin.im/doxygen/2.5.2/html/struct__PurpleConversation.html and https://developer.pidgin.im/doxygen/2.5.2/html/conversation-signals.html#received-chat-msg)
 sub pattern_match_chat_msg_cb {
     my ($account, $sender, $message, $conv, $flag, $data) = @_;
 
     my $searchPattern = Purple::Prefs::get_string($regexToMatch_pref);
+
+    my $username = $account->get_username();
+    # my $im_data = $conv->get_logging();
+
+    my $is_send = ($flag & 0x0001);
+    my $is_recv = ($flag & 0x0002);
+    my $time_since_start = time - $start_time;
+    
+
+    my $conv_props = "";
+    while ( my ($key, $value) = each(%$conv) ) {
+        $conv_props .=  "$key => $value\n";
+    }
 
     Purple::Debug::info($pluginName, "pattern callback: Value for $regexToMatch_pref = $searchPattern.\n");
     if ($searchPattern eq "") {
@@ -60,13 +79,17 @@ sub pattern_match_chat_msg_cb {
         Purple::Debug::info($pluginName, "pattern callback: matched message: $message\n");
 
         #Purple::Notify::message(undef, 2, "Pattern match", "from $sender, data =  $data, to $account, conv = $conv, flag = $flag, pattern matched: $searchPattern", "$message", undef, undef);
-        Purple::Notify::message(undef, 2, "Pattern match", "from $sender, data =  $data, pattern matched: $searchPattern", "$message", undef, undef);
-    } else {
+        # Purple::Notify::message(undef, 2, "Pattern match", "from $sender, data =  $data, pattern matched: $searchPattern", "$message", undef, undef);
+        if ($time_since_start > $startDelay) {
+            Purple::Notify::message(undef, 2, "Pattern match", "User $username $data from $sender." , "$message", undef, undef);
+        }
+	} else {
         Purple::Debug::info($pluginName, "pattern callback: message does not match: $message...\n");
     }
 }
 
 sub plugin_init {
+    
     return %PLUGIN_INFO;
 }
 
@@ -93,6 +116,7 @@ sub plugin_load {
     #}
 
     my $conversation = Purple::Conversations::get_handle();
+    $start_time = time;
     Purple::Signal::connect(
         $conversation,
         "received-chat-msg",
@@ -113,3 +137,4 @@ sub plugin_unload {
     Purple::Debug::info($pluginName,
         "plugin_unload() - $pluginName Unloaded.\n");
 }
+
