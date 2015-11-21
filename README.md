@@ -41,7 +41,7 @@ How to install the plugin for Windows
 
 ## Acknowledgments
 
-* This plugin was originally written by GitHub user [Katriana](https://github.com/katriana).  
+* The original `PidginNotifyIfMessageMatch.pl` was written by GitHub user [Katriana](https://github.com/katriana).  
 * [Zoltan Hawryluk](http://useragentman.com) is currently adding stuff to it to make Pidgin support for Hipchat not suck so much (this is not Pidgin's fault.  Hipchat has extended XMPP to do some unstandard things).
 * Information about how to get Perl plugins to work under Windows was stolen from the [forward2mobile HowToInstall page](https://code.google.com/p/forward2mobile/wiki/HowToInstall).
 
