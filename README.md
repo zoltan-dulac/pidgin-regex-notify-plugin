@@ -1,5 +1,5 @@
-HSL (Hipchat Suck Less) for Pidgin 
-==================================
+HSLP (Hipchat Suck Less Plugin) for Pidgin 
+==========================================
 
 # What Is It?
 
@@ -13,6 +13,7 @@ It includes:
 It will include in the future:
 
 * [Hipchat currently doesn't have the Jabber/XMPP names the same as their `@mention` names](https://help.hipchat.com/forums/138883-suggestions-ideas/suggestions/3560359-make-jabber-usernames-the-same-as-the-mention-nam).  I want the plugin to be able to handle this somehow.
+* automatic image embedding when a URL is sent (this would be useful for more than Hipchat).
 
 Currently, this is a work in progress.  I am messing around with this to see if it is possible to make Hipchat suck less on Pidgin.  It is not complete, but feel free to download and send feedback.
 
