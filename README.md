@@ -13,7 +13,7 @@ is mentioned in an open chat room.
 
 ## Linux and OSX
 To install it, just copy: `PidginNotifyIfMessageMatch.pl` to your
-~/.purple/plugins/ directory.  Then you can go to Tools->Plugins.  Find:
+`~/.purple/plugins/` directory.  Then you can go to Tools->Plugins.  Find:
 "Notify Message Match Plugin" and enable it.  It will ask you to configure it.
 Just enter a regex pattern to watch for.
 
@@ -23,4 +23,12 @@ How to install the plugin for Windows
 
 1. Install Perl if you don't already have it. You can get open source Strawberry Perl version 5.10.1.5 for Windows. Pidgin 2.9.x can only work with Strawberry Perl version 5.10.x. You should install Strawberry Perl version 5.10.x for Pidgin version 2.9.x not newer versions.
 2. In Pidgin go to Help:Build Information in the menu. Scroll to the bottom and check for "Perl: Enabled". If Perl is disabled, restart and/or reinstall Pidgin or reinstall Perl until it is enabled.  You may need to put the Strawberry Perl `bin` directory inside the `PATH` environment variable (by default, the Strawberry Perl `bin` directory is `C:\Strawberry\perl\bin`).  Here's [how to change your environment variables](http://www.computerhope.com/issues/ch000549.htm). 
-3. Copy `PidginNotifyIfMessageMatch.pl` to either your C:\Program Files\Pidgin\plugins or `C:\Documents and Settings\User\Application Data\.purple\plugins` directory.
+3. Copy `PidginNotifyIfMessageMatch.pl` to either your C:\Program Files\Pidgin\plugins or `C:\Documents and Settings\_<user>_\Application Data\.purple\plugins` directory (where `_<user>_` should be replaced by your own Windows username).
+
+
+## Acknowledgments
+
+* This plugin was originally written by GitHub user [Katriana](https://github.com/katriana).  
+* [Zoltan Hawryluk](http://useragentman.com) is currently adding stuff to it to make Pidgin support for Hipchat not suck so much (this is not Pidgin's fault.  Hipchat has extended XMPP to do some unstandard things).
+* Information about how to get Perl plugins to work under Windows was stolen from the [forward2mobile HowToInstall page](https://code.google.com/p/forward2mobile/wiki/HowToInstall).
+
