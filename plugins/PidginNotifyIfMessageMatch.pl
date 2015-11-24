@@ -51,6 +51,10 @@ sub prefs_info_cb {
     return $frame;
 }
 
+sub pattern_match_chat_joined_cb {
+	$start_time = time;
+}
+
 #.. we need to update this so we reduce the amount of alerts -- probably by looking at $conv (see https://developer.pidgin.im/doxygen/2.5.2/html/struct__PurpleConversation.html and https://developer.pidgin.im/doxygen/2.5.2/html/conversation-signals.html#received-chat-msg)
 sub pattern_match_chat_msg_cb {
     my ($account, $sender, $message, $conv, $flag, $data) = @_;
@@ -130,6 +134,13 @@ sub plugin_load {
         $plugin,
         \&pattern_match_chat_msg_cb,
         "received IM message");
+        
+    Purple::Signal::connect(
+        $conversation,
+        "chat-joined",
+        $plugin,
+        \&pattern_match_chat_joined_cb,
+        "joined a chat room");
 }
 
 sub plugin_unload {
